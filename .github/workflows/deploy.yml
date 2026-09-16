@@ -1,4 +1,4 @@
-```yaml
+
 name: Deploy Pygame to GitHub Pages
 
 on:
@@ -36,4 +36,4 @@ jobs:
         with:
           branch: gh-pages
           folder: build/web
-```
+
