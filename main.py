@@ -1,10 +1,15 @@
 import pygame
-import sys
-import asyncio  # 🌟 CHANGE 1: You must import asyncio at the top
+import asyncio
+import os
+import random
 
+# Pygame initialization
 pygame.init()
-screen = pygame.display.set_mode((640, 480))
+
+# Set up the display and clock
+screen = pygame.display.set_mode((600, 400))
 clock = pygame.time.Clock()
+
 
 # 🌟 CHANGE 2: Wrap your entire game setup and loop inside an async main function
 async def main():
@@ -44,7 +49,5 @@ async def main():
         await asyncio.sleep(0)
 
     pygame.quit()
-    sys.exit()
 
-# 🌟 CHANGE 4: Add this at the absolute bottom of the document to trigger the game
 asyncio.run(main())
