@@ -18,16 +18,16 @@ platforms = [
     pygame.Rect(340, 180, 180, 20)
 ]
 
-# Define the cupcakes
-cupcakes = []
-for _ in range(10):
-    cx = random.randint(0, WIDTH - 50)
-    cy = random.randint(0, HEIGHT - 50)
-    cupcakes.append(pygame.Rect(cx, cy, 50, 50))
-
 # Wrap your entire game setup and loop inside an async main function
 async def main():
     score = 0
+    
+    # Define the cupcakes safely inside the async scope, spawning above the ground
+    cupcakes = []
+    for _ in range(10):
+        cx = random.randint(0, WIDTH - 50)
+        cy = random.randint(0, 300)  # Keeps them higher up so they don't get stuck inside the floor
+        cupcakes.append(pygame.Rect(cx, cy, 50, 50))
 
     # Load your images
     player_image = pygame.image.load("assets/player.png")
@@ -67,7 +67,6 @@ async def main():
             player_rect.right = WIDTH
             
         player_dy += gravity     
-        
         player_rect.y += player_dy
         is_grounded = False  
    
@@ -113,4 +112,5 @@ async def main():
 
     pygame.quit()
 
+# Execute the application
 asyncio.run(main())
