@@ -18,8 +18,6 @@ async def main():
     # Wikipedia-style colors
     BACKGROUND = (246, 246, 246)
     PLATFORM_COLOR = (176, 190, 197)
-    PLATFORM_TOP = (51, 102, 153)
-    OUTLINE_COLOR = (70, 70, 70)
     TEXT_COLOR = (32, 33, 34)
 
     platforms = [
