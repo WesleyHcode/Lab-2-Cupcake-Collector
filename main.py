@@ -103,7 +103,11 @@ async def main():
             cupcake_image,
             (cupcake.x, cupcake.y)
         )
-            
+
+        font = pygame.font.Font(None, 50)
+        text_surface = font.render("score: " + str(score), False, (255, 255, 255))
+        screen.blit(text_surface, (0, 0))
+        
         pygame.display.flip()
         clock.tick(60)
         
