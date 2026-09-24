@@ -23,19 +23,21 @@ cupcakes = []
 for _ in range(10):
     cx = random.randint(0, WIDTH - 50)
     cy = random.randint(0, HEIGHT - 50)
-   
     cupcakes.append(pygame.Rect(cx, cy, 50, 50))
 
-# 🌟 CHANGE 2: Wrap your entire game setup and loop inside an async main function
+# Wrap your entire game setup and loop inside an async main function
 async def main():
     score = 0
 
-    # Load your assets exactly the same way inside the function
+    # Load your assets
     player_image = pygame.image.load("assets/player.png")
     player_rect = player_image.get_rect(center=(320, 240))
-    player_speed = [5, 4]
+    
+    player_speed = 5 
     gravity = 0.5
     jump_speed = -10
+    
+    player_dy = 0 
     is_grounded = False
 
     cupcake_image = pygame.image.load("assets/cupcake.png")
@@ -93,16 +95,16 @@ async def main():
         
         for platform in platforms:
             pygame.draw.rect(
-            screen,
-            (100, 180, 100),
-            platform
-        )
+                screen,
+                (100, 180, 100),
+                platform
+            )
         
         for cupcake in cupcakes:
             screen.blit(
-            cupcake_image,
-            (cupcake.x, cupcake.y)
-        )
+                cupcake_image,
+                (cupcake.x, cupcake.y)
+            )
 
         font = pygame.font.Font(None, 50)
         text_surface = font.render("score: " + str(score), False, (255, 255, 255))
@@ -111,8 +113,7 @@ async def main():
         pygame.display.flip()
         clock.tick(60)
         
-        # 🌟 CHANGE 3: Add this exact line right after your clock tick!
-        # This pauses the loop for a microsecond so the browser doesn't freeze.
+        # Pauses the loop for a microsecond so the browser doesn't freeze.
         await asyncio.sleep(0)
 
     pygame.quit()
