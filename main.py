@@ -29,21 +29,17 @@ for _ in range(10):
 async def main():
     score = 0
 
-    # Load your assets
+    # Load your images
     player_image = pygame.image.load("assets/player.png")
     player_rect = player_image.get_rect(center=(320, 240))
     
     player_speed = 5 
     gravity = 0.5
     jump_speed = -10
-    
     player_dy = 0 
     is_grounded = False
 
     cupcake_image = pygame.image.load("assets/cupcake.png")
-    
-    # Audio elements load normally here
-    bounce_sound = pygame.mixer.Sound("assets/bounce.mp3")
     
     running = True
     while running:
@@ -62,7 +58,6 @@ async def main():
         if keys[pygame.K_UP] and is_grounded:
             player_dy = jump_speed
             is_grounded = False
-            bounce_sound.play()
         
         player_rect.x += player_dx
         
