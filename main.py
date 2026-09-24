@@ -7,41 +7,104 @@ import random
 pygame.init()
 
 # Set up the display and clock
-screen = pygame.display.set_mode((600, 400))
+WIDTH, HEIGHT = 600, 400
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
+# Define the platforms
+platforms = [
+    pygame.Rect(0, 350, WIDTH, 50),   
+    pygame.Rect(80, 260, 180, 20), 
+    pygame.Rect(340, 180, 180, 20)
+]
+
+# Define the cupcakes
+cupcakes = []
+for _ in range(10):
+    cx = random.randint(0, WIDTH - 50)
+    cy = random.randint(0, HEIGHT - 50)
+   
+    cupcakes.append(pygame.Rect(cx, cy, 50, 50))
 
 # 🌟 CHANGE 2: Wrap your entire game setup and loop inside an async main function
 async def main():
+    score = 0
+
     # Load your assets exactly the same way inside the function
     player_image = pygame.image.load("assets/player.png")
     player_rect = player_image.get_rect(center=(320, 240))
-    speed = [5, 4]
+    player_speed = [5, 4]
+    gravity = 0.5
+    jump_speed = -10
+    is_grounded = False
+
+    cupcake_image = pygame.image.load("assets/cupcake.png")
     
     # Audio elements load normally here
     bounce_sound = pygame.mixer.Sound("assets/bounce.mp3")
-
+    
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
-        player_rect.x += speed[0]
-        player_rect.y += speed[1]
-
-        # Bounce logic and sound triggers
-        if player_rect.left < 0 or player_rect.right > 640:
-            speed[0] = -speed[0]
-            bounce_sound.play()
-        if player_rect.top < 0 or player_rect.bottom > 480:
-            speed[1] = -speed[1]
-            bounce_sound.play()
-
-        screen.fill((30, 30, 30))
-        screen.blit(player_image, player_rect)
-        pygame.display.flip()
+                 
+        keys = pygame.key.get_pressed()
         
+        player_dx = 0
+        
+        if keys[pygame.K_LEFT]:
+            player_dx = -player_speed
+        if keys[pygame.K_RIGHT]:
+            player_dx = player_speed
+        if keys[pygame.K_UP] and is_grounded:
+            player_dy = jump_speed
+            is_grounded = False
+            bounce_sound.play()
+        
+        player_rect.x += player_dx
+        
+        if player_rect.left < 0: 
+            player_rect.left = 0
+        if player_rect.right > WIDTH:
+            player_rect.right = WIDTH
+            
+        player_dy += gravity     
+        
+        player_rect.y += player_dy
+        is_grounded = False  
+   
+        for platform in platforms:
+            if player_rect.colliderect(platform):
+                if player_dy > 0:
+                    player_rect.bottom = platform.top
+                    player_dy = 0
+                    is_grounded = True
+                elif player_dy < 0:
+                    player_rect.top = platform.bottom
+                    player_dy = 0
+
+        for cupcake in cupcakes[:]:
+            if player_rect.colliderect(cupcake):
+                cupcakes.remove(cupcake)
+                score += 1
+            
+        screen.fill((0, 255, 0)) 
+        
+        for platform in platforms:
+            pygame.draw.rect(
+            screen,
+            (100, 180, 100),
+            platform
+        )
+        
+        for cupcake in cupcakes:
+            screen.blit(
+            cupcake_image,
+            (cupcake.x, cupcake.y)
+        )
+            
+        pygame.display.flip()
         clock.tick(60)
         
         # 🌟 CHANGE 3: Add this exact line right after your clock tick!
